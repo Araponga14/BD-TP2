@@ -6,46 +6,52 @@
 
 using namespace std;
 
+// Estrutura para armazenar registros de chave-valor na árvore
 struct RegArvore {
-    int chave;
-    int valor;
+    int chave;  // chave do registro
+    int valor;  // valor associado, usado como offset para localização de dados
 
+    // Construtor para inicializar chave e valor
     RegArvore(int chave, int valor) : chave(chave), valor(valor) {}
     RegArvore() : chave(0), valor(0) {}
 };
 
+// Template para estrutura do nó da árvore B+
 template <typename T>
 struct No {
-    size_t grau;
-    size_t quant_elementos;
-    RegArvore* item;
-    No<RegArvore>** filhos;
-    No<RegArvore>* pai;
-    bool folha;
+    size_t grau;                // Grau da árvore B+
+    size_t quant_elementos;     // Quantidade de elementos no nó
+    RegArvore* item;            // Array de RegArvore (chave-valor) para armazenar dados no nó
+    No<RegArvore>** filhos;     // Ponteiros para filhos do nó
+    No<RegArvore>* pai;         // Ponteiro para o nó pai
+    bool folha;                 // Indica se o nó é uma folha (sem filhos)
 
 public:
+    // Construtor do nó, inicializa arrays de itens e filhos
     No(size_t _grau) {
         this->grau = _grau;
         this->quant_elementos = 0;
 
-        RegArvore* _item = new RegArvore[grau-1];
+        RegArvore* item_ = new RegArvore[grau-1];
         for(int i=0; i<grau-1; i++){
-            _item[i] = RegArvore(0,0);
+            item_[i] = RegArvore(0,0);
         }
-        this->item = _item;
+        this->item = item_;
 
-        No<RegArvore>** _filhos = new No<RegArvore>*[grau];
+        No<RegArvore>** filhos_ = new No<RegArvore>*[grau];
         for(int i=0; i<grau; i++){
-            _filhos[i] = nullptr;
+            filhos_[i] = nullptr;
         }
-        this->filhos = _filhos;
+        this->filhos = filhos_;
         this->folha = false;
 
         this->pai = nullptr;
     }
 };
 
+// classe principal da arvore B+
 class ArvoreBPlus {
+    
 public:
     No<RegArvore>* raiz;
     size_t grau;
@@ -131,29 +137,29 @@ public:
     }
 }
 
-// Função para buscar um registro em uma árvore B+
-int range_search(int start, int end, RegArvore* result_data, int arr_length) {
-    int index=0;
+    // Função para buscar um registro em uma árvore B+
+    int range_search(int start, int end, RegArvore* result_data, int arr_length) {
+        int index=0;
 
-    No<RegArvore>* start_node = ABP_range_search(this->raiz, RegArvore(start, 0));
-    No<RegArvore>* cursor = start_node;
-    RegArvore temp = cursor->item[0];
+        No<RegArvore>* start_node = ABP_range_search(this->raiz, RegArvore(start, 0));
+        No<RegArvore>* cursor = start_node;
+        RegArvore temp = cursor->item[0];
 
-    while(temp.chave<=end){
-        if(cursor == nullptr){
-            break;
-        }
-        for(int i=0; i< cursor->quant_elementos;i++){
-            temp = cursor->item[i];
-            if((temp.chave >= start)&&(temp.chave <= end)){
-                result_data[index] = temp;
-                index++;
+        while(temp.chave<=end){
+            if(cursor == nullptr){
+                break;
             }
+            for(int i=0; i< cursor->quant_elementos;i++){
+                temp = cursor->item[i];
+                if((temp.chave >= start)&&(temp.chave <= end)){
+                    result_data[index] = temp;
+                    index++;
+                }
+            }
+            cursor = cursor->filhos[cursor->quant_elementos];
         }
-        cursor = cursor->filhos[cursor->quant_elementos];
+        return index;
     }
-    return index;
-}
 
     No<RegArvore>* search(int chave) {  // função para procurar uma chave
         
