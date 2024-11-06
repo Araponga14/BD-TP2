@@ -16,6 +16,8 @@ struct RegArvore {
     RegArvore() : chave(0), valor(0) {}
 };
 
+
+
 // Template para estrutura do nó da árvore B+
 template <typename T>
 struct No {
@@ -49,6 +51,38 @@ public:
     }
 };
 
+// Função para contar o número de nós de uma árvore B+
+int contar_nos(No<RegArvore>* node) {
+    if (node == nullptr) {
+        return 0;
+    }
+
+    int count = 1; // conta o próprio nó
+
+    if (!node->folha) {
+        for (size_t i = 0; i <= node->quant_elementos; i++) {
+            count += contar_nos(node->filhos[i]); // conta os nós filhos recursivamente
+        }
+    }
+
+    return count;
+}
+
+
+//Função para converter o título em um inteiro
+int titulo_para_int(string titulo) {
+    int chave = 0;
+    int g = 31;
+    int tam = titulo.size();
+
+    for (int i = 0; i < tam; i++)
+        chave = g * chave + (int)titulo[i];
+
+    if (chave < 0)
+        return (chave * -1) + titulo.size();
+    else
+        return chave + titulo.size();
+}
 // classe principal da arvore B+
 class ArvoreBPlus {
     
@@ -527,23 +561,6 @@ public:
 };
 
 
-// Função para contar o número de nós de uma árvore B+
-int contar_nos(No<RegArvore>* node) {
-    if (node == nullptr) {
-        return 0;
-    }
-
-    int count = 1; // conta o próprio nó
-
-    if (!node->folha) {
-        for (size_t i = 0; i <= node->quant_elementos; i++) {
-            count += contar_nos(node->filhos[i]); // conta os nós filhos recursivamente
-        }
-    }
-
-    return count;
-}
-
 // Função para buscar um registro em uma árvore B+ e retornar o registro (ou nullptr se não encontrado)
 Registro* ABP_buscar_registro(string index_filename, ifstream& dataFile, int id_busca) {
     ArvoreBPlus bpt = bpt.carregar_arvore(index_filename);
@@ -596,22 +613,6 @@ Registro* ABP_buscar_registro(string index_filename, ifstream& dataFile, int id_
 
     delete node; // Libera a memória alocada para o nó
     return registro; // Retorna o registro encontrado ou nullptr se não encontrado
-}
-
-
-//Função para converter o título em um inteiro
-int titulo_para_int(string titulo) {
-    int chave = 0;
-    int g = 31;
-    int tam = titulo.size();
-
-    for (int i = 0; i < tam; i++)
-        chave = g * chave + (int)titulo[i];
-
-    if (chave < 0)
-        return (chave * -1) + titulo.size();
-    else
-        return chave + titulo.size();
 }
 
 #endif

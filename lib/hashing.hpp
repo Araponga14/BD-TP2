@@ -51,12 +51,12 @@ void inserir_registro_bloco(ifstream& leitura, ofstream& escrita, Bloco* bloco, 
     bloco->cabecalho->espaco_livre -= registro->tamanho;
     bloco->cabecalho->pos_registros[bloco->cabecalho->num_registros] = posicao;
 
-    char buffer[TAMANHO_BLOCO];
+    char buffer[TAM_BLOCO];
     memcpy(buffer, bloco->cabecalho, sizeof(BlocoCabecalho));
-    memcpy(buffer + sizeof(BlocoCabecalho), bloco->dados, TAMANHO_BLOCO - sizeof(BlocoCabecalho));
+    memcpy(buffer + sizeof(BlocoCabecalho), bloco->dados, TAM_BLOCO - sizeof(BlocoCabecalho));
 
-    escrita.seekp(index_bucket * TAMANHO_BLOCO * NUMERO_BLOCOS + (ultimo_bloco * TAMANHO_BLOCO));
-    escrita.write(reinterpret_cast<char*>(buffer), TAMANHO_BLOCO);
+    escrita.seekp(index_bucket * TAM_BLOCO * NUM_BLOCOS + (ultimo_bloco * TAM_BLOCO));
+    escrita.write(reinterpret_cast<char*>(buffer), TAM_BLOCO);
 }
 
 // Função para inserir um registro no bucket correto e retornar o endereço no arquivo
@@ -64,18 +64,18 @@ void inserir_registro_bloco(ifstream& leitura, ofstream& escrita, Bloco* bloco, 
 int inserir_registro_bucket(Registro *registro, ifstream &entrada, ofstream &saida) {   
     int indice_bucket = funcao_hash(registro->id);
     int ultimo_bloco = 0; 
-    int inicio_bucket = indice_bucket * TAMANHO_BLOCO * NUMERO_BLOCOS; 
+    int inicio_bucket = indice_bucket * TAM_BLOCO * NUM_BLOCOS; 
     entrada.seekg(inicio_bucket);
 
-    for (int i = 0; i < NUMERO_BLOCOS; i++) {
+    for (int i = 0; i < NUM_BLOCOS; i++) {
         Bloco* bloco = new Bloco();
         bloco->cabecalho = new BlocoCabecalho();
         entrada.read(reinterpret_cast<char*>(bloco->cabecalho), sizeof(BlocoCabecalho));
-        entrada.read(reinterpret_cast<char*>(bloco->dados), TAMANHO_BLOCO - sizeof(BlocoCabecalho));
+        entrada.read(reinterpret_cast<char*>(bloco->dados), TAM_BLOCO - sizeof(BlocoCabecalho));
 
         int tam = bloco->cabecalho->espaco_livre;
         if (tam >= registro->tamanho) {   
-            int addr = inicio_bucket + (ultimo_bloco * TAMANHO_BLOCO) + sizeof(BlocoCabecalho) +
+            int addr = inicio_bucket + (ultimo_bloco * TAM_BLOCO) + sizeof(BlocoCabecalho) +
                        bloco->cabecalho->pos_registros[bloco->cabecalho->num_registros];
 
             inserir_registro_bloco(entrada, saida, bloco, registro, ultimo_bloco, indice_bucket);
@@ -85,7 +85,7 @@ int inserir_registro_bucket(Registro *registro, ifstream &entrada, ofstream &sai
             ultimo_bloco++;
             desalocar_bloco(bloco);
         }
-        if(i + 1 >= NUMERO_BLOCOS){
+        if(i + 1 >= NUM_BLOCOS){
             cout << "Erro: Não há espaço disponível para inserir o registro" << endl;
             cout << "Registros inseridos: " << registro->id -1 << endl;
             cout << "Não foi possivel gerar os arquivos de indice" << endl;
@@ -98,12 +98,12 @@ int inserir_registro_bucket(Registro *registro, ifstream &entrada, ofstream &sai
 // Função para buscar um registro específico no arquivo de dados
 // Busca o registro no bloco apropriado com base no índice hash e no ID.
 Registro* buscar_registro(ifstream& leitura, int id_busca) {
-    for (int ultimo_bloco = 0; ultimo_bloco < NUMERO_BLOCOS; ultimo_bloco++) {
+    for (int ultimo_bloco = 0; ultimo_bloco < NUM_BLOCOS; ultimo_bloco++) {
         Bloco* bloco = criar_bloco();
         int index_bucket = funcao_hash(id_busca);
-        leitura.seekg(index_bucket * TAMANHO_BLOCO * NUMERO_BLOCOS + (ultimo_bloco * TAMANHO_BLOCO));
+        leitura.seekg(index_bucket * TAM_BLOCO * NUM_BLOCOS + (ultimo_bloco * TAM_BLOCO));
         leitura.read(reinterpret_cast<char*>(bloco->cabecalho), sizeof(BlocoCabecalho));
-        leitura.read(reinterpret_cast<char*>(bloco->dados), TAMANHO_BLOCO - sizeof(BlocoCabecalho));
+        leitura.read(reinterpret_cast<char*>(bloco->dados), TAM_BLOCO - sizeof(BlocoCabecalho));
 
         if (bloco->cabecalho->num_registros > 0) {
             Registro* registro = new Registro();
@@ -136,7 +136,7 @@ Registro* buscar_registro(ifstream& leitura, int id_busca) {
                                         registro->snippet.size() + 4;
 
                     cout << "\\nQuantidade de blocos lidos para encontrar o registro: " << ultimo_bloco + 1 << endl;
-                    cout << "Total de blocos no arquivo de dados: " << NUMERO_BLOCOS * NUM_BUCKETS << endl;
+                    cout << "Total de blocos no arquivo de dados: " << NUM_BLOCOS * NUM_BUCKETS << endl;
 
                     desalocar_bloco(bloco);
                     return registro;
