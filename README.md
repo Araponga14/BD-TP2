@@ -14,5 +14,6 @@ Ricardo Oliveira Pinho de Lima (ricardo.pinho@icomp.ufam.edu.br)
 
 Este trabalho consiste na implementação de programas para armazenamento e consulta em  dados armazenados em memória secundária utilizando as estruturas de arquivo de dados e índice estudadas nas aulas. Os programas devem fornecer suporte para a inserção, assim como diferentes formas de busca, seguindo as técnicas apresentadas nas aulas de organização e indexação de arquivos.
 
-## Notas
+## Instruções para execução dos programas
 
+Inicialmente, é preciso estar no diretório "src/" para executar os programas corretamente. O primeiro programa a ser executado deve ser o "upload.cpp" e, após ele, para usar os outros programas, deve-se executar o programa "main.cpp".

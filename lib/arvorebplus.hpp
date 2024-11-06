@@ -140,7 +140,7 @@ public:
 
             for(int i=0; i<cursor->quant_elementos; i++){
                 if(cursor->item[i].chave == key.chave){
-                    cout << "\n\nQuantidade de blocos lidos para encontrar o registro no arquivo de índice: " << altura + 1 << endl;
+                    cout << "\n\nQuantidade de blocos lidos: " << altura + 1 << endl;
                     return cursor;
                 }
             }
@@ -196,7 +196,6 @@ public:
     }
 
     No<RegArvore>* search(int chave) {  // função para procurar uma chave
-        
         return ABP_busca(this->raiz, RegArvore(chave, 0)) ;
     }
 

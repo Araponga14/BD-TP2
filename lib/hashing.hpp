@@ -135,7 +135,7 @@ Registro* buscar_registro(ifstream& leitura, int id_busca) {
                                         sizeof(int) + sizeof(int) + registro->atualizacao.size() + 
                                         registro->snippet.size() + 4;
 
-                    cout << "\\nQuantidade de blocos lidos para encontrar o registro: " << ultimo_bloco + 1 << endl;
+                    cout << "\nQuantidade de blocos lidos para encontrar o registro: " << ultimo_bloco + 1 << endl;
                     cout << "Total de blocos no arquivo de dados: " << NUM_BLOCOS * NUM_BUCKETS << endl;
 
                     desalocar_bloco(bloco);
