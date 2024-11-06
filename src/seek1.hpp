@@ -9,8 +9,7 @@ void seek1(int id_busca) {
     Registro* registro_busca = ABP_buscar_registro(indice_primario, arquivo_Dados, id_busca);
 
     if (registro_busca != nullptr) {
-        cout << "\nRegistro com id " << id_busca << " encontrado! " << endl;
-        cout << "Campos do Registro:" << endl;
+        cout << "\nRegistro de ID " << id_busca << ":" << endl;
         imprimir_registro(*registro_busca);
         cout << endl;
 

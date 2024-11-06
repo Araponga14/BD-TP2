@@ -10,8 +10,7 @@ void seek2(const string& titulo) {
 
     if(registro_busca != nullptr) {
 
-        cout << "\nRegistro com título " << titulo << " encontrado! " << endl;
-        cout << "Campos do Registro:" << endl;
+        cout << "\nRegistro com título '" << titulo << "':" << endl;
         imprimir_registro(*registro_busca);
         cout << endl;
 

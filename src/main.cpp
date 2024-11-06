@@ -1,3 +1,4 @@
+#include <limits>
 #include "findrec.hpp"
 #include "seek1.hpp"
 #include "seek2.hpp"
@@ -19,11 +20,12 @@ int main() {
         } else if (op == 2) {
             string titulo;
             cout << "Seek2 - digite o título a ser buscado: ";
-            cin >> titulo;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            getline(cin, titulo);
             seek2(titulo);
         } else if (op == 3) {
             int id;
-            cout << "Findrec - digite o ID a ser buscado";
+            cout << "Findrec - digite o ID a ser buscado: ";
             cin >> id;
             findrec(id);
         } else if (op == -1){

@@ -9,8 +9,7 @@ void findrec(int id_busca) {
 
     // Verifica se o registro foi encontrado e imprime os campos, se encontrado
     if(registro_busca != NULL) {
-        cout << "\nRegistro com id " << id_busca << " encontrado! " << endl;
-        cout << "Campos do Registros:" << endl;
+        cout << "\nRegistro de ID " << id_busca << ":" << endl;
         imprimir_registro(*registro_busca);
         cout << endl;
         
