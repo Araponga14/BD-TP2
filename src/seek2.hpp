@@ -1,9 +1,9 @@
-#include "lib/arvorebplus.hpp"
+#include "../lib/arvorebplus.hpp"
 
 void seek2(const string& titulo) {
     // Abertura do arquivo de dados organizado por hashing
-    ifstream arquivo_Dados("arquivo_de_dados.bin", ios::binary | ios::in);
-    string indice_secundario = "indice_secundario.bin";
+    ifstream arquivo_Dados("../data/arquivo_de_dados.bin", ios::binary | ios::in);
+    string indice_secundario = "../data/indice_secundario.bin";
 
     // Busca pelo registro com o título especificado
     Registro* registro_busca = ABP_buscar_registro(indice_secundario, arquivo_Dados, titulo_para_int(remove_caracteres(titulo)));
